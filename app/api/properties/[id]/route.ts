@@ -3,10 +3,18 @@ import { properties } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+type Params = {
+  id: string;
+};
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<Params> }
+) {
   try {
-    const id = parseInt(params.id);
-    const result = await db.select().from(properties).where(eq(properties.id, id));
+    const { id } = await params;
+    const numId = parseInt(id);
+    const result = await db.select().from(properties).where(eq(properties.id, numId));
 
     if (!result.length) {
       return NextResponse.json({ error: "Property not found" }, { status: 404 });
@@ -19,9 +27,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<Params> }
+) {
   try {
-    const id = parseInt(params.id);
+    const { id } = await params;
+    const numId = parseInt(id);
     const body = await request.json();
 
     const result = await db
@@ -44,7 +56,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
         ownerAddress: body.ownerAddress,
         updatedAt: Math.floor(Date.now() / 1000),
       })
-      .where(eq(properties.id, id))
+      .where(eq(properties.id, numId))
       .returning();
 
     if (!result.length) {
@@ -58,10 +70,14 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
   }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<Params> }
+) {
   try {
-    const id = parseInt(params.id);
-    await db.delete(properties).where(eq(properties.id, id));
+    const { id } = await params;
+    const numId = parseInt(id);
+    await db.delete(properties).where(eq(properties.id, numId));
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Error deleting property:", error);
