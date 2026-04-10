@@ -1,0 +1,66 @@
+.page-wrapper {
+  min-height: 100vh;
+  background-color: #f1f5f9;
+}
+
+.header {
+  background: white;
+  border-bottom: 1px solid var(--color-border);
+  padding: 2rem 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.header-content h1 {
+  margin: 0;
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0.5rem;
+}
+
+.header-content p {
+  margin: 0;
+  color: var(--color-text-secondary);
+}
+
+.main-content {
+  padding: 2rem 0;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid var(--color-border);
+  background: white;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.nav-tab {
+  flex: 0 0 auto;
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: var(--color-text-secondary);
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.nav-tab:hover {
+  color: var(--color-text);
+}
+
+.nav-tab.active {
+  color: var(--color-accent);
+  border-bottom-color: var(--color-accent);
+}
+
+.tab-content {
+  background: white;
+  border-radius: 0 0 0.75rem 0.75rem;
+  padding: 2rem;
+}
