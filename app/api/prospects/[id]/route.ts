@@ -1,14 +1,11 @@
 import { db } from "@/db";
 import { prospects } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: Request, { params }: any) {
   try {
-    const id = parseInt((params as any).id);
+    const id = parseInt(params.id);
     const result = await db.select().from(prospects).where(eq(prospects.id, id));
 
     if (!result.length) {
@@ -22,12 +19,9 @@ export async function GET(
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: Request, { params }: any) {
   try {
-    const id = parseInt((params as any).id);
+    const id = parseInt(params.id);
     const body = await request.json();
 
     const result = await db
@@ -56,12 +50,9 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: Request, { params }: any) {
   try {
-    const id = parseInt((params as any).id);
+    const id = parseInt(params.id);
     await db.delete(prospects).where(eq(prospects.id, id));
     return NextResponse.json({ success: true });
   } catch (error) {
