@@ -10,7 +10,6 @@ export async function GET(request: NextRequest) {
     const type = searchParams.get("type");
     const search = searchParams.get("search");
 
-    let query = db.select().from(prospects);
     const conditions = [];
 
     if (type && type !== "all") {
@@ -20,11 +19,12 @@ export async function GET(request: NextRequest) {
       conditions.push(like(prospects.name, `%${search}%`));
     }
 
-    if (conditions.length > 0) {
-      query = db.select().from(prospects).where(and(...conditions));
-    }
+    // FIX: Execute the query directly. 
+    // This avoids the "Type mismatch" by not reassigning a variable.
+    const results = conditions.length > 0 
+      ? await db.select().from(prospects).where(and(...conditions))
+      : await db.select().from(prospects);
 
-    const results = await query;
     return NextResponse.json(results);
   } catch (error) {
     console.error("Error fetching prospects:", error);
