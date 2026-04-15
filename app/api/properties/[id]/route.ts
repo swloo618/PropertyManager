@@ -1,7 +1,7 @@
 import { db } from "@/db";
 import { properties } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
+import { eq, and, like } from "drizzle-orm";
+import { NextResponse, NextRequest } from "next/server";
 
 // GET all properties with optional filters
 export async function GET(request: NextRequest) {
