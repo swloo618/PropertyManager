@@ -3,19 +3,33 @@ import { prospects } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(_request: Request, { params }: any) {
+// GET all prospects with optional filters
+export async function GET(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
-    const result = await db.select().from(prospects).where(eq(prospects.id, id));
+    const searchParams = request.nextUrl.searchParams;
+    const type = searchParams.get("type");
+    const search = searchParams.get("search");
 
-    if (!result.length) {
-      return NextResponse.json({ error: "Prospect not found" }, { status: 404 });
+    const conditions = [];
+
+    if (type && type !== "all") {
+      conditions.push(eq(prospects.type, type));
+    }
+    if (search) {
+      conditions.push(like(prospects.name, `%${search}%`));
     }
 
-    return NextResponse.json(result[0]);
+    let results;
+    if (conditions.length > 0) {
+      results = await db.select().from(prospects).where(and(...conditions));
+    } else {
+      results = await db.select().from(prospects);
+    }
+
+    return NextResponse.json(results);
   } catch (error) {
-    console.error("Error fetching prospect:", error);
-    return NextResponse.json({ error: "Failed to fetch prospect" }, { status: 500 });
+    console.error("Error fetching prospects:", error);
+    return NextResponse.json({ error: "Failed to fetch prospects" }, { status: 500 });
   }
 }
 

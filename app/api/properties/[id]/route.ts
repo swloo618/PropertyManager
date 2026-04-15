@@ -3,19 +3,37 @@ import { properties } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(_request: Request, { params }: any) {
+// GET all properties with optional filters
+export async function GET(request: NextRequest) {
   try {
-    const id = parseInt(params.id);
-    const result = await db.select().from(properties).where(eq(properties.id, id));
+    const searchParams = request.nextUrl.searchParams;
+    const type = searchParams.get("type");
+    const purpose = searchParams.get("purpose");
+    const search = searchParams.get("search");
 
-    if (!result.length) {
-      return NextResponse.json({ error: "Property not found" }, { status: 404 });
+    const conditions = [];
+
+    if (type) {
+      conditions.push(eq(properties.propertyType, type));
+    }
+    if (purpose) {
+      conditions.push(eq(properties.purpose, purpose));
+    }
+    if (search) {
+      conditions.push(like(properties.address, `%${search}%`));
     }
 
-    return NextResponse.json(result[0]);
+    let results;
+    if (conditions.length > 0) {
+      results = await db.select().from(properties).where(and(...conditions));
+    } else {
+      results = await db.select().from(properties);
+    }
+
+    return NextResponse.json(results);
   } catch (error) {
-    console.error("Error fetching property:", error);
-    return NextResponse.json({ error: "Failed to fetch property" }, { status: 500 });
+    console.error("Error fetching properties:", error);
+    return NextResponse.json({ error: "Failed to fetch properties" }, { status: 500 });
   }
 }
 
