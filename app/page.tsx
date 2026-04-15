@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import PropertiesSection from "@/components/PropertiesSection";
 import ProspectsSection from "@/components/ProspectsSection";
 import "./page.css";
