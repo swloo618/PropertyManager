@@ -58,7 +58,7 @@ export async function PUT(request: Request, { params }: any) {
   }
 }
 
-export async function DELETE(request: Request, { params }: any) {
+export async function DELETE(_request: Request, { params }: any) {
   try {
     const id = parseInt(params.id);
     await db.delete(properties).where(eq(properties.id, id));
