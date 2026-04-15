@@ -3,7 +3,7 @@ import { properties } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-export async function GET(request: Request, { params }: any) {
+export async function GET(_request: Request, { params }: any) {
   try {
     const id = parseInt(params.id);
     const result = await db.select().from(properties).where(eq(properties.id, id));
