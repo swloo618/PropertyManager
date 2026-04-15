@@ -4,6 +4,8 @@ import { eq, like, and } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET all properties with optional filters
+// ... imports stay the same
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
@@ -11,7 +13,6 @@ export async function GET(request: NextRequest) {
     const purpose = searchParams.get("purpose");
     const search = searchParams.get("search");
 
-    let query = db.select().from(properties);
     const conditions = [];
 
     if (type) {
@@ -24,11 +25,11 @@ export async function GET(request: NextRequest) {
       conditions.push(like(properties.address, `%${search}%`));
     }
 
-    if (conditions.length > 0) {
-      query = db.select().from(properties).where(and(...conditions));
-    }
+    // FIX: Execute the query directly based on conditions
+    const results = conditions.length > 0 
+      ? await db.select().from(properties).where(and(...conditions))
+      : await db.select().from(properties);
 
-    const results = await query;
     return NextResponse.json(results);
   } catch (error) {
     console.error("Error fetching properties:", error);
