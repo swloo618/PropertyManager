@@ -1,38 +1,38 @@
 import { sql } from "drizzle-orm";
-import { sqliteTable, text, integer} from "drizzle-orm/sqlite-core";
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 
 export const properties = sqliteTable("properties", {
-  id: integer().primaryKey({ autoIncrement: true }),
-  address: text().notNull(),
-  propertyType: text().notNull(), // condo, apartment, shoplot, warehouse, terrace, bungalow, semid
-  size: integer().notNull(), // sqft
-  landTitle: text().notNull(), // freehold, leasehold99, leasehold30, leasehold60
-  bedrooms: integer().default(0),
-  bathrooms: integer().default(0),
-  purpose: text().notNull(), // rent or sale
-  price: text().notNull(), // stored as string to handle both formats
-  description: text(),
-  ownerName: text().notNull(),
-  ownerPhone: text().notNull(),
-  ownerEmail: text(),
-  ownerIdType: text(),
-  ownerIdNumber: text(),
-  ownerAddress: text(),
-  createdAt: integer().default(sql`(cast(unixepoch() as int))`),
-  updatedAt: integer().default(sql`(cast(unixepoch() as int))`),
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  address: text("address").notNull(),
+  propertyType: text("property_type").notNull(), // Best practice: use snake_case for DB columns
+  size: integer("size").notNull(),
+  landTitle: text("land_title").notNull(),
+  bedrooms: integer("bedrooms").default(0),
+  bathrooms: integer("bathrooms").default(0),
+  purpose: text("purpose").notNull(),
+  price: text("price").notNull(),
+  description: text("description"),
+  ownerName: text("owner_name").notNull(),
+  ownerPhone: text("owner_phone").notNull(),
+  ownerEmail: text("owner_email"),
+  ownerIdType: text("owner_id_type"),
+  ownerIdNumber: text("owner_id_number"),
+  ownerAddress: text("owner_address"),
+  createdAt: integer("created_at").default(sql`(cast(unixepoch() as int))`),
+  updatedAt: integer("updated_at").default(sql`(cast(unixepoch() as int))`),
 });
 
 export const prospects = sqliteTable("prospects", {
-  id: integer().primaryKey({ autoIncrement: true }),
-  name: text().notNull(),
-  phone: text().notNull(),
-  email: text(),
-  type: text().notNull(), // buyer, tenant, both
-  budget: text().notNull(),
-  preferredPropertyType: text(), // condo, apartment, terrace, bungalow, semid, shoplot, warehouse, any
-  remarks: text(), // detailed notes about requirements
-  createdAt: integer().default(sql`(cast(unixepoch() as int))`),
-  updatedAt: integer().default(sql`(cast(unixepoch() as int))`),
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull(),
+  phone: text("phone").notNull(),
+  email: text("email"),
+  type: text("type").notNull(),
+  budget: text("budget").notNull(),
+  preferredPropertyType: text("preferred_property_type"),
+  remarks: text("remarks"),
+  createdAt: integer("created_at").default(sql`(cast(unixepoch() as int))`),
+  updatedAt: integer("updated_at").default(sql`(cast(unixepoch() as int))`),
 });
 
 export type Property = typeof properties.$inferSelect;
