@@ -1,9 +1,10 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-  schema: "./db/schema.ts", // Path to your schema file
-  out: "./drizzle",         // Where migrations will be stored
-  dialect: "turso",         // CRITICAL: This was missing
+  schema: "./db/schema.ts",
+  out: "./drizzle",
+  dialect: "sqlite", // Change this to "sqlite"
+  driver: "turso",   // Add this line back
   dbCredentials: {
     url: process.env.TURSO_CONNECTION_URL!,
     authToken: process.env.TURSO_AUTH_TOKEN!,
