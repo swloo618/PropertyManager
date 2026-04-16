@@ -11,9 +11,9 @@
     "db:push": "drizzle-kit push:sqlite"
   },
   "dependencies": {
-    "@libsql/client": "^0.4.3",
-    "drizzle-kit": "^0.20.18",
-    "drizzle-orm": "^0.30.10",
+    "@libsql/client": "^0.17.2",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
